@@ -11,8 +11,11 @@ function App() {
 
   var [query, setQuery] = useState('');
   const [weather, setWeather] = useState('');
+
   var [unit, setUnit] = useState('imperial');
   var [unitAbrev, setUnitAbrev] = useState('F');
+  const unitImperial = 'imperial';
+  const unitMetric = 'metric';
 
   const maxTempF = 93;
   const minTempF = 45;
@@ -25,48 +28,28 @@ function App() {
   const [redVal, setRedVal] = useState(255 / (maxTempF - minTempF) * (temperature - minTempF));
   const [blueVal, setBlueVal] = useState(255 / (maxTempF - minTempF) * (maxTempF - temperature));
 
-  const unitImperial = 'imperial';
-  const unitMetric = 'metric';
-
-
   const search = evt => {
  
     if(evt.key === "Enter" && unitAbrev === 'F') {
-        fetch(`${api.base}weather?q=${query}&units=${unit}&APPID=${api.key}`)
-        .then(res => res.json())
-        .then(result => {
-          setWeather(result);
-          console.log(result);
-          console.log(result.main.temp)
-          setTemperature(result.main.temp)
-          console.log("OG FIRST");
-          tempColor();
-          console.log(temperature + "hello");
-          setRedVal(255 / (maxTempF - minTempF) * (result.main.temp - minTempF));
-          setBlueVal(255 / (maxTempF - minTempF) * (maxTempF - result.main.temp));
-          });
-          console.log(weather.main);
-
-          
-        }
+      fetch(`${api.base}weather?q=${query}&units=${unit}&APPID=${api.key}`)
+      .then(res => res.json())
+      .then(result => {
+        setWeather(result);
+        setTemperature(result.main.temp)
+        setRedVal(255 / (maxTempF - minTempF) * (result.main.temp - minTempF));
+        setBlueVal(255 / (maxTempF - minTempF) * (maxTempF - result.main.temp));
+      });
+    }
     if(evt.key === "Enter" && unitAbrev === 'C') {
-        fetch(`${api.base}weather?q=${query}&units=${unit}&APPID=${api.key}`)
-        .then(res => res.json())
-        .then(result => {
-          setWeather(result);
-          console.log(result);
-          console.log(result.main.temp)
-          setTemperature(result.main.temp)
-          console.log("OG FIRST");
-          tempColor();
-          console.log(temperature + "hello");
-          setRedVal(255 / (maxTempC - minTempC) * (result.main.temp - minTempC));
-          setBlueVal(255 / (maxTempC - minTempC) * (maxTempC - result.main.temp));
-          });
-        console.log(weather.main);
-  
-            
-          }
+      fetch(`${api.base}weather?q=${query}&units=${unit}&APPID=${api.key}`)
+      .then(res => res.json())
+      .then(result => {
+        setWeather(result);
+        setTemperature(result.main.temp)
+        setRedVal(255 / (maxTempC - minTempC) * (result.main.temp - minTempC));
+        setBlueVal(255 / (maxTempC - minTempC) * (maxTempC - result.main.temp));
+      });
+    }
   }
 
   const dateBuilder = (d) => {
@@ -77,85 +60,52 @@ function App() {
     let date = d.getDate();
     let month = months[d.getMonth()];
     let year = d.getFullYear();
+
     return `${day} ${date} ${month} ${year}`
   }
 
-  // function updateTemp() {
-  //   if(unit === unitImperial){
-  //     fetch(`${api.base}weather?q=${query}&units=imperial&APPID=${api.key}`)
-  //     .then(res => res.json())
-  //     .then(result => {
-  //       setWeather(result);
-  //       console.log(result);
-  //       setTemp(result.main.temp)
-  //       });
 
-  //       setRedVal(255 / (maxTempF - minTempF) * (temp - minTempF));
-  //       setBlueVal(255 / (maxTempF - minTempF) * (maxTempF - temp));
-  //     }
-  //     if(unit === unitMetric){
-  //       fetch(`${api.base}weather?q=${query}&units=metric&APPID=${api.key}`)
-  //       .then(res => res.json())
-  //       .then(result => {
-  //         setWeather(result);
-  //         console.log(result);
-  //         setTemp(result.main.temp)
-  //         });
-  
-
-  //         setRedVal(255 / (maxTempC - minTempC) * (temp - minTempC));
-  //         setBlueVal(255 / (maxTempC - minTempC) * (maxTempC - temp));
-  //       }
-  // }
 
   function tempColor(){
     if(unit === unitImperial){
-        setRedVal(255 / (maxTempF - minTempF) * (temperature - minTempF));
-        setBlueVal(255 / (maxTempF - minTempF) * (maxTempF - temperature));
-        console.log("this FFFF works")
-      }
-      if(unit === unitMetric){
-          setRedVal(255 / (maxTempC - minTempC) * (temperature - minTempC));
-          setBlueVal(255 / (maxTempC - minTempC) * (maxTempC - temperature));
-          console.log("this works")
-        }
-      }
+      setRedVal(255 / (maxTempF - minTempF) * (temperature - minTempF));
+      setBlueVal(255 / (maxTempF - minTempF) * (maxTempF - temperature));
+    }
+    if(unit === unitMetric){
+      setRedVal(255 / (maxTempC - minTempC) * (temperature - minTempC));
+      setBlueVal(255 / (maxTempC - minTempC) * (maxTempC - temperature));
+    }
+  }
 
   function changeUnit() {
-
     if(unit === unitMetric){
       setUnit('imperial');
       setUnitAbrev('F');
+
       if(query !== ''){
-      fetch(`${api.base}weather?q=${query}&units=imperial&APPID=${api.key}`)
-      .then(res => res.json())
-      .then(result => {
-        setWeather(result);
-        console.log(result);
-        setTemperature(result.main.temp)
+        fetch(`${api.base}weather?q=${query}&units=imperial&APPID=${api.key}`)
+        .then(res => res.json())
+        .then(result => {
+          setWeather(result);
+          setTemperature(result.main.temp)
         });
         tempColor();
-        //setRedVal(255 / (maxTempF - minTempF) * (temp - minTempF));
-        //setBlueVal(255 / (maxTempF - minTempF) * (maxTempF - temp));
-        }
       }
+    }
     if(unit === unitImperial){
       setUnit('metric');
       setUnitAbrev('C');
+
       if(query !== ''){
-      fetch(`${api.base}weather?q=${query}&units=metric&APPID=${api.key}`)
-      .then(res => res.json())
-      .then(result => {
-        setWeather(result);
-        console.log(result);
-        setTemperature(result.main.temp)
+        fetch(`${api.base}weather?q=${query}&units=metric&APPID=${api.key}`)
+        .then(res => res.json())
+        .then(result => {
+          setWeather(result);
+          setTemperature(result.main.temp)
         });
         tempColor();
-        //setRedVal(255 / (maxTempC - minTempC) * (temp - minTempC));
-        //setBlueVal(255 / (maxTempC - minTempC) * (maxTempC - temp));
-        }
       }
-
+    }
   }
 
   function clear() {
@@ -164,7 +114,7 @@ function App() {
     .then(result => {
       setWeather(result);
       setQuery('');
-      });
+    });
   }
 
   return (
@@ -198,22 +148,20 @@ function App() {
             <div className="date">{dateBuilder(new Date())}</div>
           </div>
           <div className="weather-box">
-            
             <div className="temp" style={{ color : `rgb(${redVal}, 0, ${blueVal})` }}>
               {Math.round(weather.main.temp)}°{unitAbrev}
             </div>
             <div className="weather">{weather.weather[0].main}</div>
           </div>
-
         </div>
         ) : ('')}
           <div className="clear-box">
-          <input 
-            className="clear-button"
-            type="button"
-            value="Clear"
-            onClick={clear}
-          /> 
+            <input 
+              className="clear-button"
+              type="button"
+              value="Clear"
+              onClick={clear}
+            /> 
           </div>
       </main>
     </div>

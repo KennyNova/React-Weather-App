@@ -19,6 +19,35 @@ main{
   padding: 25px;
 }
 
+
+
+
+
+.clear-button{
+  position:fixed;
+  display: inline-block;
+  width:50%;
+  margin-left:-25%;
+  background-color:rgba(255, 255, 255, 0.5);
+  box-shadow: 0px 5px rgba(0, 0, 0, 0.2);
+  bottom:0px;
+  left:50%;
+  text-align: center;
+  color: #313131;
+  font-size: 20px;
+  border-radius: 16px 16px 0px 0px;
+  border: none;
+  outline: inherit;
+  
+
+  transition: 0.4s ease;
+}
+
+.clear-button:hover{
+  background-color: rgba(255, 255, 255, 0.75);
+  cursor: pointer;
+}
+
 .search-box{
   width: 100%;
   margin: 0 0 25px;
@@ -69,6 +98,8 @@ main{
 
 .weather-box{
   text-align: center;
+
+  transition: all 1s ease-in-out;
 }
 
 .weather-box .temp {
@@ -80,13 +111,16 @@ main{
   
   padding: 15px 25px;
 
-  color: #fff;
+  
   font-size: 102px;
   font-weight: 900;
 
-  text-shadow: 3px 6px rgba(50, 50, 70 0.5);
+  text-shadow: 3px 3px rgba(50, 50, 70, 0.5);
   text-align: center;
   box-shadow: rgba(0, 0, 0, 0.2);
+
+  
+  transition: all 2s ease-in-out;
 }
 
 .weather-box .weather {
@@ -94,6 +128,8 @@ main{
   font-size: 48px;
   font-weight: 700;
   text-shadow: 3px 3px rgba(50, 50, 70 0.5);
+
+
 }
 
 .switch-unit{

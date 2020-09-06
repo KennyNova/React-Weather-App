@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-
+import rain from './rain.png';
+import snow from './snow.png';
 
 const api = {
   key: "0a2df7d88ca8849ed565d07e8a72fb7c",
@@ -11,6 +12,7 @@ function App() {
 
   var [query, setQuery] = useState('');
   const [weather, setWeather] = useState('');
+  const [weatherForecast, setWeatherForecast] = useState('');
 
   var [unit, setUnit] = useState('imperial');
   var [unitAbrev, setUnitAbrev] = useState('F');
@@ -18,15 +20,18 @@ function App() {
   const unitMetric = 'metric';
 
   const maxTempF = 93;
-  const minTempF = 45;
+  const minTempF = 35;
 
   const maxTempC = 34;
-  const minTempC = 7;
+  const minTempC = 1;
 
   const [temperature, setTemperature] = useState(0);
 
   const [redVal, setRedVal] = useState(255 / (maxTempF - minTempF) * (temperature - minTempF));
   const [blueVal, setBlueVal] = useState(255 / (maxTempF - minTempF) * (maxTempF - temperature));
+
+  const background = [null, rain, snow]
+  const [backgroundNumber, setBackgroundNumber] = useState(0);
 
   const search = evt => {
  
@@ -35,9 +40,17 @@ function App() {
       .then(res => res.json())
       .then(result => {
         setWeather(result);
-        setTemperature(result.main.temp)
+        setWeatherForecast(result.weather[0].main);
+        setTemperature(result.weather.temp)
+        console.log(temperature);
         setRedVal(255 / (maxTempF - minTempF) * (result.main.temp - minTempF));
         setBlueVal(255 / (maxTempF - minTempF) * (maxTempF - result.main.temp));
+        if(result.weather[0].main === "Thunderstorm" || result.weather[0].main === "Rain"){
+          setBackgroundNumber(1)
+        }
+        if(weatherForecast === "Snow"){
+          setBackgroundNumber(1)
+        }
       });
     }
     if(evt.key === "Enter" && unitAbrev === 'C') {
@@ -49,6 +62,12 @@ function App() {
         setRedVal(255 / (maxTempC - minTempC) * (result.main.temp - minTempC));
         setBlueVal(255 / (maxTempC - minTempC) * (maxTempC - result.main.temp));
       });
+      if(weatherForecast === "Thunderstorm" || weatherForecast === "Rain"){
+        setBackgroundNumber(1)
+      }
+      if(weatherForecast === "Snow"){
+        setBackgroundNumber(1)
+      }
     }
   }
 
@@ -63,8 +82,6 @@ function App() {
 
     return `${day} ${date} ${month} ${year}`
   }
-
-
 
   function tempColor(){
     if(unit === unitImperial){
@@ -118,7 +135,7 @@ function App() {
   }
 
   return (
-    <div className='app' > 
+    <div className='app' style={{image: `url(${background[backgroundNumber]})`,size: "256px 144px"}}> 
       <main>
         <div className="search-box">
           <input 
@@ -151,7 +168,7 @@ function App() {
             <div className="temp" style={{ color : `rgb(${redVal}, 0, ${blueVal})` }}>
               {Math.round(weather.main.temp)}°{unitAbrev}
             </div>
-            <div className="weather">{weather.weather[0].main}</div>
+            <div className="weather">{weatherForecast}</div>
           </div>
         </div>
         ) : ('')}

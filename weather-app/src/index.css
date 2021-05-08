@@ -19,6 +19,8 @@ main{
   min-height: 100vh;
   background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.75));
   padding: 25px;
+
+  transition: all 2s ease-in-out;
 }
 
 
@@ -66,7 +68,7 @@ main{
   border-radius: 0px 0px 16px 16px;
   margin-top: -25px;
 
-  box-shadow: 0px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 5px 5px 5px  rgba(0, 0, 0, 0.2);
 
   color: #313131;
   font-size: 20px;
@@ -121,13 +123,24 @@ main{
   transition: all 2s ease-in-out;
 }
 
+.wrapper{
+  background-color: rgba(82, 82, 82, 0.9);
+  border-radius: 16px;
+
+  width: 500px;
+  margin-left:auto;
+  margin-right:auto;
+
+  transition: all 2s ease-in-out;
+}
+
 .weather-box .weather {
   color: #fff;
   font-size: 48px;
   font-weight: 700;
   text-shadow: 3px 3px rgba(50, 50, 70 0.5);
 
-
+  transition: all 2s ease-in-out;
 }
 
 .switch-unit{
@@ -180,4 +193,15 @@ main{
 .checkbox:checked + .switch {
   background-color: #7983ff;
   transition: all 0.3s;
+}
+
+.error{
+  max-width: 500px;
+  margin: 0 auto; 
+
+  color: rgb(165, 40, 40);
+}
+
+.error-message{
+  text-align: center;
 }

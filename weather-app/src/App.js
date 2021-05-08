@@ -11,6 +11,7 @@ const api = {
 function App() {
 
   var [query, setQuery] = useState('');
+  var [activeQuery, setActiveQuery] = useState('');
   const [weather, setWeather] = useState('');
   const [weatherForecast, setWeatherForecast] = useState('');
 
@@ -33,41 +34,79 @@ function App() {
   const background = [null, rain, snow]
   const [backgroundNumber, setBackgroundNumber] = useState(0);
 
+  const [errorMessage, setErrorMessage] = useState(false);
+
   const search = evt => {
- 
     if(evt.key === "Enter" && unitAbrev === 'F') {
+      setActiveQuery(query)
       fetch(`${api.base}weather?q=${query}&units=${unit}&APPID=${api.key}`)
-      .then(res => res.json())
+      .then(res => {
+        if (res.ok) {
+          setErrorMessage(false)
+          return res.json();
+        } else {
+          throw new Error('invalid input');
+        }
+      })
       .then(result => {
+        setActiveQuery(query)
         setWeather(result);
         setWeatherForecast(result.weather[0].main);
         setTemperature(result.weather.temp)
-        console.log(temperature);
+        console.log(result.weather[0].main);
         setRedVal(255 / (maxTempF - minTempF) * (result.main.temp - minTempF));
         setBlueVal(255 / (maxTempF - minTempF) * (maxTempF - result.main.temp));
         if(result.weather[0].main === "Thunderstorm" || result.weather[0].main === "Rain"){
           setBackgroundNumber(1)
+          console.log("thisalsoran")
         }
-        if(weatherForecast === "Snow"){
+        else if(result.weather[0].main === "Snow"){
           setBackgroundNumber(1)
         }
+        else{
+          setBackgroundNumber(0)
+          console.log("thisran")
+        }
+        setQuery('');
+      })
+      .catch((error) => {
+        console.log(error)
+        setErrorMessage(true)
       });
     }
     if(evt.key === "Enter" && unitAbrev === 'C') {
       fetch(`${api.base}weather?q=${query}&units=${unit}&APPID=${api.key}`)
-      .then(res => res.json())
+      .then(res => {
+        if (res.ok) {
+          setErrorMessage(false)
+          return res.json();
+        } else {
+          throw new Error('invalid input');
+        }
+      })
       .then(result => {
+        setActiveQuery(query)
         setWeather(result);
+        setWeatherForecast(result.weather[0].main);
+        console.log(result.main.temp)
         setTemperature(result.main.temp)
         setRedVal(255 / (maxTempC - minTempC) * (result.main.temp - minTempC));
         setBlueVal(255 / (maxTempC - minTempC) * (maxTempC - result.main.temp));
+        if(result.weather[0].main === "Thunderstorm" || result.weather[0].main === "Rain"){
+          setBackgroundNumber(1)
+        }
+        else if(result.weather[0].main === "Snow"){
+          setBackgroundNumber(1)
+        }
+        else{
+          setBackgroundNumber(0)
+        }
+        setQuery('');
+      })
+      .catch((error) => {
+        console.log(error)
+        setErrorMessage(true)
       });
-      if(weatherForecast === "Thunderstorm" || weatherForecast === "Rain"){
-        setBackgroundNumber(1)
-      }
-      if(weatherForecast === "Snow"){
-        setBackgroundNumber(1)
-      }
     }
   }
 
@@ -95,16 +134,28 @@ function App() {
   }
 
   function changeUnit() {
+    console.log(activeQuery)
     if(unit === unitMetric){
       setUnit('imperial');
       setUnitAbrev('F');
 
-      if(query !== ''){
-        fetch(`${api.base}weather?q=${query}&units=imperial&APPID=${api.key}`)
-        .then(res => res.json())
+      if(activeQuery !== ''){
+        fetch(`${api.base}weather?q=${activeQuery}&units=imperial&APPID=${api.key}`)
+        .then(res => {
+          if (res.ok) {
+            setErrorMessage(false)
+            return res.json();
+          } else {
+            throw new Error('invalid input');
+          }
+        })
         .then(result => {
           setWeather(result);
           setTemperature(result.main.temp)
+        })
+        .catch((error) => {
+          console.log(error)
+          setErrorMessage(true)
         });
         tempColor();
       }
@@ -113,12 +164,25 @@ function App() {
       setUnit('metric');
       setUnitAbrev('C');
 
-      if(query !== ''){
-        fetch(`${api.base}weather?q=${query}&units=metric&APPID=${api.key}`)
-        .then(res => res.json())
+      if(activeQuery !== ''){
+        fetch(`${api.base}weather?q=${activeQuery}&units=metric&APPID=${api.key}`)
+        .then(res => {
+          if (res.ok) {
+            setErrorMessage(false)
+            return res.json();
+          } else {
+            throw new Error('invalid input');
+          }
+        })
         .then(result => {
+          console.log(result)
           setWeather(result);
           setTemperature(result.main.temp)
+          console.log(result.main.temp)
+        })
+        .catch((error) => {
+          console.log(error)
+          setErrorMessage(true)
         });
         tempColor();
       }
@@ -135,7 +199,7 @@ function App() {
   }
 
   return (
-    <div className='app' style={{image: `url(${background[backgroundNumber]})`,size: "256px 144px"}}> 
+    <div className='app' style={{backgroundImage: `url(${background[backgroundNumber]})`, backgroundSize: "256px 144px"}}> 
       <main>
         <div className="search-box">
           <input 
@@ -147,6 +211,7 @@ function App() {
             onKeyPress={search}
           />
         </div>
+
         <div className="switch-unit">
             <input 
               type="checkbox"
@@ -158,8 +223,13 @@ function App() {
             />
           <label htmlFor="toggle" className="switch" />
         </div>
+        {(errorMessage) ? (
+        <div className="error">
+          <p className="error-message">please enter a valid city or country</p>
+        </div>
+        ) : ('')}
         {(typeof weather.main != "undefined") ? (
-        <div>
+        <div className="wrapper">
           <div className="location-box">
             <div className="location">{weather.name}, {weather.sys.country}</div>
             <div className="date">{dateBuilder(new Date())}</div>

@@ -11,4 +11,4 @@ Live version: [Weather-App](https://react-weather-app-bay-six.vercel.app/)
 git clone https://github.com/KennyNova/React-Weather-App
 ```
 -Then navigate to the directory you cloned the repo to and run ```npm install```\
--Finally run ```npm start```
+-Finally run ```npm start``` and go to [localhost:3000](localhost:3000)

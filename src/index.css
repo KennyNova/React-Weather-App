@@ -29,12 +29,12 @@ main{
   display: inline-block;
   width:50%;
   margin-left:-25%;
-  background-color:rgba(255, 255, 255, 0.5);
+  background-color:#282828;
   box-shadow: 0px 5px rgba(0, 0, 0, 0.2);
   bottom:0px;
   left:50%;
   text-align: center;
-  color: #313131;
+  color: grey;
   font-size: 20px;
   border-radius: 16px 16px 0px 0px;
   border: none;
@@ -64,7 +64,7 @@ main{
   border: none;
   outline: none;
 
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: #131313;
   border-radius: 0px 0px 16px 16px;
   margin-top: -25px;
 
@@ -154,10 +154,10 @@ main{
   position : relative ;
   width : 40px;
   height : 20px;
-  background-color: #eee;
+  background-color: #282828;
   border-radius: 20px;
   transition: all 0.3s;
-
+  color: grey;
 }
 
 .switch::after {
@@ -191,7 +191,7 @@ main{
   transform: rotate(360deg);
 }
 .checkbox:checked + .switch {
-  background-color: #7983ff;
+  background-color: #3e49da;
   transition: all 0.3s;
 }
 

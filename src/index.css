@@ -127,9 +127,11 @@ main{
   background-color: rgba(82, 82, 82, 0.9);
   border-radius: 16px;
 
-  width: 500px;
+  max-width: 500px;
+  min-width: 300px;
   margin-left:auto;
   margin-right:auto;
+  
 
   transition: all 2s ease-in-out;
 }
@@ -204,4 +206,8 @@ main{
 
 .error-message{
   text-align: center;
+}
+
+@media only screen and (max-width: 1024px) {
+
 }
